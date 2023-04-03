@@ -2,6 +2,8 @@ import requests
 from colorama import Fore, Back, Style
 import time
 from bs4 import BeautifulSoup
+import json
+
 print(Fore.CYAN+"""
 ██████╗░░█████╗░██████╗░██╗░█████╗░░░░░░░██████╗░██╗░░░░░
 ██╔══██╗██╔══██╗██╔══██╗██║██╔══██╗░░░░░░██╔══██╗██║░░░░░
@@ -48,4 +50,10 @@ def authenticate(username, password):
 	}
 	course_page = r.post(f"{course_website}/session_verification", data=data)
 	print("Authentication Completed!\n\nNow You're ready to download Podia Courses.")
-	return [course_page.headers, course_page.cookies]
+	with open('podia_headers.json', 'w') as f:
+	    json.dump(dict(course_page.headers), f)
+	with open('podia_cookies.json', 'w') as f:
+	    json.dump(dict(course_page.cookies), f)
+	print("Podia session stored permanently.")
+	return 200
+authenticate(email, password)
